@@ -9,7 +9,7 @@ public class Todo {
     private String title;
     private int done_flg;
     private String time_limit;
-    private long important;
+    private String priority;
 }
 //public class Importance {
 

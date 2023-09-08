@@ -8,33 +8,34 @@
   </select>
   
   <select id="selectIncomplete" resultType="com.todo.app.entity.Todo">
-  	select * from todo_items where done_flg = 0
+    select * from todo_items where done_flg = 0
   </select>
   
   <select id="selectComplete" resultType="com.todo.app.entity.Todo">
-  	select * from todo_items where done_flg = 1
+    select * from todo_items where done_flg = 1
+  </select>
+  
+  <select id="selectHigh" resultType="com.todo.app.entity.Todo">
+    select * from todo_items where done_flg = 0 and priority= 'High'
   </select>
 
+  <!-- priorityを追加 -->
   <insert id="add" parameterType="com.todo.app.entity.Todo">
-    insert into todo_items (title,time_limit)
-    values (#{title},to_date(#{time_limit},'yy-mm-dd'))
+    insert into todo_items (title, time_limit, priority)
+    values (#{title}, to_date(#{time_limit},'yy-mm-dd'), #{priority}::priority_level)  <!-- 修正部分 -->
   </insert>
 
+  <!-- priorityを追加 -->
   <update id="update" parameterType="com.todo.app.entity.Todo">
     update todo_items set
       title = #{title},
       time_limit = to_date(#{time_limit},'yy-mm-dd'),
-      done_flg = #{done_flg}
-      where id = #{id}
+      done_flg = #{done_flg},
+      priority = #{priority}::priority_level  <!-- 修正部分 -->
+    where id = #{id}
   </update>
   
   <delete id="delete" parameterType="com.todo.app.entity.Todo">
-  	delete from todo_items where done_flg = 1
+    delete from todo_items where done_flg = 1
   </delete>
-  
- <!--  <select id="selectA" resultType="com.todo.app.entity.Todo">
-    select * from importances_importance
-  </select>
-  -->
-  
 </mapper>

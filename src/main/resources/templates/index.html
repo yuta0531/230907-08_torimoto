@@ -1,29 +1,53 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
-<meta charset="UTF-8">
-<title>TodoApp</title>
+  <meta charset="UTF-8">
+  <title>TodoApp</title>
+  <link href='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.css' rel='stylesheet' />
+  <style>
+    #calendar {
+      width: 70%;
+      margin: auto;
+    }
+  </style>
+  <script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/jquery.min.js'></script>
+  <script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/lib/moment.min.js'></script>
+  <script src='https://fullcalendar.io/releases/fullcalendar/3.9.0/fullcalendar.min.js'></script>
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+    var todos = /*[[${jsonTodos}]]*/ '[]';
+    /*]]>*/
+  </script>
 </head>
 <body>
   <h1>TodoList</h1>
   <h3>マイタスク</h3>
-  <form method="post" th:action="@{/update}" th:each="todo : ${todos}" >
-    <input type="checkbox"name="done_flg" value="1"/>
+  <form method="post" th:action="@{/update}" th:each="todo : ${todos}">
+    <input type="checkbox" name="done_flg" value="1"/>
     <input type="hidden" name="id" th:value="${todo.id}" />
-    <input type="text" name="title"th:value="${todo.title}" />
-    <input type="date" name="time_limit"th:value="${todo.time_limit}" />
+    <input type="text" name="title" th:value="${todo.title}" />
+    <input type="date" name="time_limit" th:value="${todo.time_limit}" />
+    <input type="submit" value="更新" />
+  </form>
+  
+    <h3>Highタスク</h3>
+  <form method="post" th:action="@{/update}" th:each="todo : ${highTodos}">
+    <input type="checkbox" name="done_flg" value="1"/>
+    <input type="hidden" name="id" th:value="${todo.id}" />
+    <input type="text" name="title" th:value="${todo.title}" />
+    <input type="date" name="time_limit" th:value="${todo.time_limit}" />
     <input type="submit" value="更新" />
   </form>
 
   <h3>完了済み</h3>
-   <form method="post" th:action="@{/update}" th:each="todo : ${doneTodos}" >
-    <input type="checkbox"name="done_flg" value="0"/>
+  <form method="post" th:action="@{/update}" th:each="todo : ${doneTodos}">
+    <input type="checkbox" name="done_flg" value="1"/>
     <input type="hidden" name="id" th:value="${todo.id}" />
-    <input type="text" name="title"th:value="${todo.title}" style="text-decoration:line-through"/>
-    <input type="date" name="time_limit"th:value="${todo.time_limit}" />
+    <input type="text" name="title" th:value="${todo.title}" style="text-decoration:line-through"/>
+    <input type="date" name="time_limit" th:value="${todo.time_limit}" />
     <input type="submit" value="更新" />
   </form>
-  
+
   <form method="delete" th:action="@{/delete}">
     <input type="submit" value="完了済みを削除" />
   </form>
@@ -32,15 +56,42 @@
   <form method="post" th:action="@{/add}">
     <input type="text" name="title" />
     <input type="date" name="time_limit"/>
+    <select name="priority">
+     <option value="High">高</option>
+     <option value="Medium">中</option>
+     <option value="Low">低</option>
+    </select>
     <input type="submit" value="追加" />
   </form>
 
-<!--
-  <h3>重要度</h3>
-  <form method="post" th:action="@{/important}">
-    <input type="text" name="importance" th:value="${impotance.importance}" />
-    <input type="submit" value="追加" />
-  </form>
--->
+  <div id='calendar'></div>
+
+<script>
+    $(document).ready(function() {
+        $('#calendar').fullCalendar({
+            events: JSON.parse(todos).map(function(todo) {
+                let color;
+                switch (todo.priority) {
+                    case 'High':
+                        color = 'red';
+                        break;
+                    case 'Medium':
+                        color = 'pink';
+                        break;
+                    case 'Low':
+                        color = 'blue';
+                        break;
+                    default:
+                        color = 'grey';
+                }
+                return {
+                    title: todo.title,
+                    start: todo.time_limit,
+                    color: color // 色を設定
+                };
+            })
+        });
+    });
+</script>
 </body>
 </html>

@@ -15,6 +15,8 @@ public interface TodoMapper {
     public List<Todo> selectIncomplete();
     // 完了を表示
     public List<Todo> selectComplete();
+    //Highのみ
+    public List<Todo> selectHigh();
     // 課題を追加
     public void add(Todo todo);
     // 課題を更新
@@ -22,6 +24,5 @@ public interface TodoMapper {
     // 課題削除
     public void delete();
     
- //   public List<Imprtance> selectA();
     
 }
