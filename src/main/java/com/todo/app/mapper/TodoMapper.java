@@ -22,4 +22,6 @@ public interface TodoMapper {
     // 課題削除
     public void delete();
     
+ //   public List<Imprtance> selectA();
+    
 }

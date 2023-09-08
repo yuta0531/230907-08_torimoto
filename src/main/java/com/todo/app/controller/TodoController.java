@@ -25,7 +25,7 @@ public class TodoController {
     @RequestMapping("/")
     public String index(Model model) {
     	// 全件表示
-//       List<Todo> list = todoMapper.selectAll();
+  //    List<Todo> list = todoMapper.selectAll();
     	// 未完了のみ表示
     	List<Todo> list = todoMapper.selectIncomplete();
     	// 完了のみ表示
@@ -33,6 +33,7 @@ public class TodoController {
         model.addAttribute("todos",list);
         model.addAttribute("doneTodos", doneList);
         return "index";
+     //   List<Impotance> list = todoMapper.selectA();
     }
     
     /**
